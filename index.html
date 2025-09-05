@@ -86,7 +86,14 @@
       </div>
       <div class="thumb">
         <div class="aspect-video">
-          <iframe id="hero-iframe" src="https://youtu.be/JKOIWVJ3jms?si=iG1gxZe5xzXlRqjf" allowfullscreen></iframe>
+          <iframe
+              id="hero-iframe"
+              src="https://www.youtube-nocookie.com/embed/JKOIWVJ3jms?autoplay=1&rel=0&modestbranding=1&color=white"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              title="Beam9 Player">
+          </iframe>
+
         </div>
       </div>
     </section>
@@ -132,15 +139,18 @@
     const year = new Date().getFullYear(); byId('year').textContent = year;
 
     function cardHTML(t){
-      const href = `https://www.youtube.com/embed/${t.youtubeId}`;
-      return `<div role="listitem" class="card">
-        <div class="thumb aspect-video">
-          <iframe src="${href}" allowfullscreen></iframe>
+      const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
+      return `<article role="listitem" class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
+        <div class="thumb aspect-video" style="cursor:pointer;position:relative">
+          <img src="${thumb}" alt="${t.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px"
+           onerror="this.src='data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1280\' height=\'720\'><rect width=\'100%\' height=\'100%\' fill=\'#182230\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'#8aa0b4\' font-family=\'system-ui\' font-size=\'48\'>Beam9</text></svg>')}'">
+          <button class="btn-play" aria-label="Play ${t.title}">▶ Play</button>
         </div>
         <div class="meta"><h3 class="title-sm">${t.title}</h3>
           <div class="tags">${(t.tags||[]).join(' · ')}</div></div>
-      </div>`
+      </article>`;
     }
+
 
     const grid = byId('grid');
     function render(){
@@ -154,27 +164,48 @@
 
     function ask(){
       const text = byId('askbox').value.toLowerCase();
-      const want = new Set();
-      if(/sleep|calm|baby|lullaby|relax/.test(text)) want.add('lullaby');
-      if(/thai|ภาษาไทย|thai pop/.test(text)) want.add('thai');
-      if(/afro|afrobeats|dance|groove|party/.test(text)) want.add('afrobeats');
-      if(/remix|mix/.test(text)) want.add('remix');
+        const want = new Set();
+        if(/sleep|calm|baby|lullaby|relax/.test(text)) want.add('lullaby');
+        if(/thai|ภาษาไทย|thai pop/.test(text)) want.add('thai');
+        if(/afro|afrobeats|dance|groove|party/.test(text)) want.add('afrobeats');
+        if(/remix|mix/.test(text)) want.add('remix');
+
       const tags = [...want];
       const scored = tracks.map(t=>{
         const overlap = (t.tags||[]).filter(tag => tags.includes(tag.toLowerCase())).length;
         const recency = t.releaseDate ? (new Date(t.releaseDate).getTime()/1e13) : 0;
-        return {t,score:overlap + recency};
+        return {t, score: overlap + recency};
       }).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.t);
+
       const recs = byId('recs');
-      recs.innerHTML = scored.map(t=>`
-        <div class="card">
-          <div class="thumb aspect-video">
-            <iframe src="https://www.youtube.com/embed/${t.youtubeId}" allowfullscreen></iframe>
+      recs.innerHTML = scored.map(t=>{
+        const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
+        return `<article class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
+          <div class="thumb aspect-video" style="cursor:pointer;position:relative">
+            <img src="${thumb}" alt="${t.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px">
+            <button class="btn-play" aria-label="Play ${t.title}">▶ Play</button>
           </div>
           <div class="meta"><h3 class="title-sm">${t.title}</h3>
           <div class="tags">${(t.tags||[]).join(' · ')}</div></div>
-        </div>`).join('');
+        </article>`;
+      }).join('');
     }
+
+
+    function playTrack(id, title){
+      const url = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&color=white`;
+      const hero = byId('hero-iframe');
+      if (hero) hero.src = url;
+      const hTitle = byId('hero-title');
+      if (hTitle && title) hTitle.textContent = title;
+    }
+
+    (function initHero(){
+      if(tracks.length){
+        playTrack(tracks[0].youtubeId, tracks[0].title);
+      }
+    })();
+
 
     render();
   </script>
