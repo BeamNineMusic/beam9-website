@@ -184,5 +184,78 @@
       render();
     })();
   </script>
+  <script>
+  let tracks = [];
+
+  const byId = x => document.getElementById(x);
+  byId('year').textContent = new Date().getFullYear();
+
+  function cardHTML(t){
+    const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
+    return `<div class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
+      <img src="${thumb}" alt="${t.title}">
+      <div class="title-sm">${t.title}</div>
+      <div class="tags">${(t.tags||[]).join(' · ')}</div>
+    </div>`;
+  }
+
+  function render(){
+    const grid = byId('grid');
+    const q = (byId('q')?.value||'').trim().toLowerCase();
+    const activeTags = new Set([...document.querySelectorAll('.chip.active')].map(c=>c.dataset.tag));
+    let list = tracks.slice();
+
+    if(q){ list = list.filter(t => t.title.toLowerCase().includes(q) || (t.tags||[]).some(tag=>tag.toLowerCase().includes(q))); }
+    if(activeTags.size){ list = list.filter(t => (t.tags||[]).some(tag => activeTags.has(tag.toLowerCase()))); }
+
+    const sortVal = byId('sortSelect')?.value || 'latest';
+    if(sortVal === 'latest'){
+      list.sort((a,b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
+    } else if(sortVal === 'az'){
+      list.sort((a,b)=> a.title.localeCompare(b.title));
+    }
+
+    grid.innerHTML = list.map(cardHTML).join('');
+  }
+
+  function playTrack(id,title){
+    const url = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&color=white`;
+    byId('hero-iframe').src = url;
+    byId('hero-title').textContent = title;
+  }
+
+  // Load tracks.json dynamically
+  fetch('tracks.json')
+    .then(res => res.json())
+    .then(data => {
+      tracks = data;
+      // init tag chips
+      const tagSet = new Set();
+      tracks.forEach(t => (t.tags||[]).forEach(tag => tagSet.add(tag.toLowerCase())));
+      const chips = byId('chips');
+      chips.innerHTML = [...tagSet].sort().map(tag=>`<button class="chip" data-tag="${tag}">${tag}</button>`).join('');
+      chips.addEventListener('click', e=>{
+        if(!e.target.classList.contains('chip')) return;
+        e.target.classList.toggle('active');
+        render();
+      });
+
+      // init first video + render
+      if(tracks.length){ playTrack(tracks[0].youtubeId, tracks[0].title); }
+      render();
+    })
+    .catch(err => console.error('Failed to load tracks.json:', err));
+
+  // event listeners
+  byId('q').addEventListener('input', render);
+  byId('sortSelect').addEventListener('change', render);
+
+  // delegate clicks on grid
+  document.getElementById('grid').addEventListener('click', e=>{
+    const card = e.target.closest('[data-yid]');
+    if(!card) return;
+    playTrack(card.dataset.yid, card.dataset.title);
+  });
+</script>
 </body>
 </html>
