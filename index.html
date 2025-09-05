@@ -29,8 +29,20 @@
     .title-sm{font-weight:700;margin:6px 0}
     .tags{font-size:12px;opacity:.75}
     footer{margin-top:30px;font-size:14px;opacity:.75;text-align:center}
-    /* Accessible h1 styling */
     h1{font-size:28px;margin:0 0 10px;font-weight:800}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* AI assistant (single version) */
+    #assistant{margin-top:40px;padding:20px;background:#0f172a;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
+    #assistant h2{margin-top:0;font-size:20px}
+    #assistant form{display:flex;gap:10px}
+    #assistant input{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#0b1020;color:#e5e7eb}
+    #assistant button{padding:10px 14px;border-radius:8px;background:#22d3ee;border:none;color:#0b1020;font-weight:700;cursor:pointer}
+    #assistant .recs{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .rec{background:#0b152a;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden}
+    .rec .meta{padding:8px 10px}
+    .rec .meta .t{font-weight:700}
+    .rec .meta .g{font-size:12px;opacity:.75}
   </style>
 </head>
 <body>
@@ -41,7 +53,6 @@
         <p>A tiny, fast Beam9 hub. Click a thumbnail to watch on YouTube. No logins, no fuss.</p>
       </div>
       <div class="aspect-video">
-        <!-- Removed unsupported feature policy names -->
         <iframe id="hero-iframe" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Beam9 Player"></iframe>
       </div>
     </section>
@@ -61,6 +72,16 @@
       </div>
       <div id="chips" class="chips"></div>
       <div id="grid" class="grid"></div>
+    </section>
+
+    <!-- Single assistant section -->
+    <section id="assistant" aria-label="Ask Beam9">
+      <h2>🤖 Ask Beam9</h2>
+      <form onsubmit="event.preventDefault(); askAssistant();">
+        <input id="askbox" placeholder="Type how you feel or what you want to hear… (e.g., calm thai lullaby, play zombie, shuffle)" />
+        <button type="submit">Suggest</button>
+      </form>
+      <div id="recs" class="recs" role="list"></div>
     </section>
 
     <footer>
@@ -127,7 +148,7 @@
     byId('q').addEventListener('input', render);
     byId('sortSelect').addEventListener('change', render);
 
-    // Tag chips + search init
+    // Build tag chips
     (function initFilters(){
       const tagSet = new Set();
       tracks.forEach(t => (t.tags||[]).forEach(tag => tagSet.add(tag.toLowerCase())));
@@ -140,9 +161,91 @@
       });
     })();
 
-    // init first video
+    // --- Assistant: lightweight intent + recommend ---
+    function askAssistant(){
+      const text = (byId('askbox')?.value||'').toLowerCase();
+      const want = new Set();
+      if(/sleep|calm|baby|lullaby|relax/.test(text)) want.add('lullaby');
+      if(/thai|ภาษาไทย|thai pop/.test(text)) want.add('thai');
+      if(/afro|afrobeats|dance|groove|party/.test(text)) want.add('afrobeats');
+      if(/remix|mix/.test(text)) want.add('remix');
+      if(/sad|cry|lonely|เศร้า/.test(text)) want.add('sad');
+
+      // commands
+      if(/^play\s+/.test(text)){
+        const term = text.replace(/^play\s+/, '').trim();
+        const hit = tracks.find(t => t.title.toLowerCase().includes(term));
+        if(hit){ playTrack(hit.youtubeId, hit.title); byId('recs').innerHTML = recHTML([hit]); return; }
+      }
+      if(text === 'shuffle'){
+        const shuffled = tracks.slice();
+        for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
+        byId('recs').innerHTML = recHTML(shuffled.slice(0,6)); return;
+      }
+      if(text === 'latest'){
+        const latest = tracks.slice().sort((a,b)=>new Date(b.releaseDate)-new Date(a.releaseDate)).slice(0,6);
+        byId('recs').innerHTML = recHTML(latest); return;
+      }
+
+      const scored = tracks.map(t=>{
+        const tagsLC = (t.tags||[]).map(s=>s.toLowerCase());
+        let score = 0;
+        score += tagsLC.filter(tag => want.has(tag)).length * 2;
+        if(text) score += tagsLC.filter(tag => text.includes(tag) || tag.includes(text)).length;
+        if(text && t.title.toLowerCase().includes(text)) score += 2;
+        if(t.releaseDate) score += (new Date(t.releaseDate).getTime()/1e13);
+        return {t, score};
+      }).sort((a,b)=>b.score-a.score)
+        .filter(x=>x.score>0)
+        .slice(0,6)
+        .map(x=>x.t);
+
+      byId('recs').innerHTML = recHTML(scored.length ? scored : tracks.slice(0,6));
+    }
+
+    function recHTML(list){
+      return list.map(t=>{
+        const thumb = `https://img.youtube.com/vi/${t.youtubeId}/mqdefault.jpg`;
+        return `<article class="rec" data-yid="${t.youtubeId}" data-title="${t.title}" role="listitem">
+          <img src="${thumb}" alt="${t.title}" />
+          <div class="meta"><div class="t">${t.title}</div>
+          <div class="g">${(t.tags||[]).join(' · ')}</div></div>
+        </article>`;
+      }).join('');
+    }
+
+    // one-time click handler for recs
+    document.addEventListener('click', e=>{
+      const rec = e.target.closest('.rec');
+      if(!rec) return;
+      playTrack(rec.dataset.yid, rec.dataset.title);
+      document.getElementById('home')?.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    // live suggestions (debounced)
+    (function(){
+      const input = byId('askbox');
+      if(!input) return;
+      let t;
+      input.addEventListener('input', ()=>{
+        clearTimeout(t);
+        t = setTimeout(()=>{
+          if(input.value.trim().length>=2){ askAssistant(); }
+          else { // show latest if cleared
+            const latest = tracks.slice().sort((a,b)=>new Date(b.releaseDate)-new Date(a.releaseDate)).slice(0,6);
+            byId('recs').innerHTML = recHTML(latest);
+          }
+        }, 160);
+      });
+    })();
+
+    // init hero + grid + assistant defaults
     playTrack(tracks[0].youtubeId, tracks[0].title);
     render();
+    (function seedAssistant(){
+      const latest = tracks.slice().sort((a,b)=>new Date(b.releaseDate)-new Date(a.releaseDate)).slice(0,6);
+      byId('recs').innerHTML = recHTML(latest);
+    })();
   </script>
 </body>
 </html>
