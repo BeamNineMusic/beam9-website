@@ -11,5 +11,5 @@
   { "slug": "fire-in-me", "title": "Fire in Me", "youtubeId": "6J9_5-MIGF8", "tags": ["eng","encouragement","pop rock ballad"], "releaseDate": "2025-08-06" },
   { "slug": "ข้ามฟ้าทะเลแสนไกล", "title": "ข้ามฟ้าทะเลแสนไกล", "youtubeId": "PpURvrJEpq0", "tags": ["thai","tradition","pop"], "releaseDate": "2025-08-18" },
   { "slug": "กล่องดำ", "title": "กล่องดำ", "youtubeId": "Kzo58bt8qIo", "tags": ["thai","thai pop","encouragement"], "releaseDate": "2025-08-04" },
-  { slug: 'ใจอยากโบยบิน', title: 'ใจอยากโบยบิน', youtubeId: '9zxAu1kfATs', tags: ['thai','afrobeats','dance'], releaseDate: '2025-08-16' }
+  { "slug": "ใจอยากโบยบิน", "title": "ใจอยากโบยบิน", "youtubeId": "9zxAu1kfATs", "tags": ["thai","afrobeats","dance"], "releaseDate": "2025-08-16" }
 ]
