@@ -30,12 +30,17 @@
     .tags{font-size:12px;opacity:.75}
     footer{margin-top:30px;font-size:14px;opacity:.75;text-align:center}
     h1{font-size:28px;margin:0 0 10px;font-weight:800}
-    #assistant{margin-top:40px;padding:20px;background:#0f172a;border-radius:12px}
+    /* Assistant */
+    #assistant{margin-top:40px;padding:20px;background:#0f172a;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
     #assistant h2{margin-top:0;font-size:20px}
     #assistant form{display:flex;gap:10px}
     #assistant input{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#0b1020;color:#e5e7eb}
     #assistant button{padding:10px 14px;border-radius:8px;background:#22d3ee;border:none;color:#0b1020;font-weight:700;cursor:pointer}
-    #assistant .recs{margin-top:16px;display:grid;gap:12px}
+    #assistant .recs{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .rec{background:#0b152a;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;cursor:pointer}
+    .rec .meta{padding:8px 10px}
+    .rec .meta .t{font-weight:700}
+    .rec .meta .g{font-size:12px;opacity:.75}
   </style>
 </head>
 <body>
@@ -67,13 +72,13 @@
       <div id="grid" class="grid"></div>
     </section>
 
-    <section id="assistant">
+    <section id="assistant" aria-label="Ask Beam9">
       <h2>🤖 Ask Beam9</h2>
-      <form onsubmit="event.preventDefault(); beamSuggest();">
-        <input id="askbox" placeholder="Type how you feel or what you want to hear..." />
+      <form onsubmit="event.preventDefault(); askAssistant();">
+        <input id="askbox" placeholder="calm thai lullaby • play zombie • shuffle • latest" />
         <button type="submit">Suggest</button>
       </form>
-      <div id="recs" class="recs"></div>
+      <div id="recs" class="recs" role="list"></div>
     </section>
 
     <footer>
@@ -82,21 +87,12 @@
   </div>
 
   <script>
+    // ---------- State ----------
     let tracks = [];
-
-    async function loadTracks(){
-      try {
-        const res = await fetch('tracks.json?ver=' + Date.now(), { cache: 'no-store' });
-        tracks = await res.json();
-      } catch(e){
-        console.warn('tracks.json fetch failed', e);
-        tracks = [];
-      }
-    }
-
-    const byId = x => document.getElementById(x);
+    const byId = id => document.getElementById(id);
     byId('year').textContent = new Date().getFullYear();
 
+    // ---------- UI helpers ----------
     function cardHTML(t){
       const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
       return `<div class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
@@ -111,14 +107,17 @@
       const q = (byId('q')?.value||'').trim().toLowerCase();
       const activeTags = new Set([...document.querySelectorAll('.chip.active')].map(c=>c.dataset.tag));
       let list = tracks.slice();
+
       if(q){ list = list.filter(t => t.title.toLowerCase().includes(q) || (t.tags||[]).some(tag=>tag.toLowerCase().includes(q))); }
       if(activeTags.size){ list = list.filter(t => (t.tags||[]).some(tag => activeTags.has(tag.toLowerCase()))); }
-      const sortVal = byId('sortSelect').value;
+
+      const sortVal = byId('sortSelect')?.value || 'latest';
       if(sortVal === 'latest'){
         list.sort((a,b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
       } else if(sortVal === 'az'){
         list.sort((a,b)=> a.title.localeCompare(b.title));
       }
+
       grid.innerHTML = list.map(cardHTML).join('');
     }
 
@@ -128,110 +127,118 @@
       byId('hero-title').textContent = title;
     }
 
-    document.addEventListener('click', e=>{
-      const card = e.target.closest('[data-yid]');
-      if(!card) return;
-      playTrack(card.dataset.yid, card.dataset.title);
-    });
-
-    byId('q').addEventListener('input', render);
-    byId('sortSelect').addEventListener('change', render);
-
-    function askAssistant(){ beamSuggest(); }
-
-    function beamSuggest(){
-      const text = byId('askbox').value.toLowerCase();
-      const want = new Set();
-      if(/sleep|calm|baby|lullaby|relax/.test(text)) want.add('lullaby');
-      if(/thai|ภาษาไทย|thai pop/.test(text)) want.add('thai');
-      if(/afro|afrobeats|dance|groove|party/.test(text)) want.add('afrobeats');
-      if(/remix|mix/.test(text)) want.add('remix');
-      if(/sad|cry|lonely/.test(text)) want.add('sad');
-
-      const tags = [...want];
-      const scored = tracks.map(t=>{
-        const overlap = (t.tags||[]).filter(tag => tags.includes(tag.toLowerCase())).length;
-        const recency = t.releaseDate ? (new Date(t.releaseDate).getTime()/1e13) : 0;
-        return {t, score: overlap + recency};
-      }).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.t);
-
-      const recs = byId('recs');
-      recs.innerHTML = scored.map(t=>{
-        const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
-        return `<div class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
+    // ---------- Assistant ----------
+    function recHTML(list){
+      return list.map(t=>{
+        const thumb = `https://img.youtube.com/vi/${t.youtubeId}/mqdefault.jpg`;
+        return `<article class="rec" data-yid="${t.youtubeId}" data-title="${t.title}">
           <img src="${thumb}" alt="${t.title}">
-          <div class="title-sm">${t.title}</div>
-          <div class="tags">${(t.tags||[]).join(' · ')}</div>
-        </div>`;
+          <div class="meta"><div class="t">${t.title}</div><div class="g">${(t.tags||[]).join(' · ')}</div></div>
+        </article>`;
       }).join('');
     }
 
-    (async function init(){
-      await loadTracks();
-      if(tracks.length){
-        playTrack(tracks[0].youtubeId, tracks[0].title);
+    function askAssistant(){
+      const input = byId('askbox');
+      const text = (input?.value || '').toLowerCase().trim();
+
+      // Commands
+      if (text.startsWith('play ')){
+        const term = text.replace(/^play\s+/, '').trim();
+        const hit = tracks.find(t => t.title.toLowerCase().includes(term));
+        if (hit){
+          playTrack(hit.youtubeId, hit.title);
+          byId('recs').innerHTML = recHTML([hit]);
+          return;
+        }
       }
-      // build tag filters
-      const tagSet = new Set();
-      tracks.forEach(t => (t.tags||[]).forEach(tag => tagSet.add(tag.toLowerCase())));
-      const chips = byId('chips');
-      chips.innerHTML = [...tagSet].sort().map(tag=>`<button class="chip" data-tag="${tag}">${tag}</button>`).join('');
-      chips.addEventListener('click', e=>{
-        if(!e.target.classList.contains('chip')) return;
-        e.target.classList.toggle('active');
-        render();
-      });
-      render();
-    })();
-  </script>
-  <script>
-  let tracks = [];
+      if (text === 'shuffle'){
+        const shuffled = tracks.slice();
+        for (let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
+        byId('recs').innerHTML = recHTML(shuffled.slice(0,6));
+        return;
+      }
+      if (text === 'latest' || text === ''){
+        const latest = tracks.slice().sort((a,b)=>new Date(b.releaseDate)-new Date(a.releaseDate)).slice(0,6);
+        byId('recs').innerHTML = recHTML(latest);
+        return;
+      }
 
-  const byId = x => document.getElementById(x);
-  byId('year').textContent = new Date().getFullYear();
+      // Simple intent scoring
+      const wants = new Set();
+      if(/calm|sleep|relax|lullaby|ช้า/.test(text)) wants.add('lullaby');
+      if(/sad|cry|lonely|เศร้า|เสียใจ/.test(text)) wants.add('sad');
+      if(/happy|สนุก|โจ๊ะ|dance|party|มัน/.test(text)) wants.add('dance');
+      if(/encourag|ฮึบ|สู้|ไฟ/.test(text)) wants.add('encouragement');
+      if(/thai|ภาษาไทย|thai.pop|thai pop/.test(text)) wants.add('thai');
+      if(/rap|แร็พ/.test(text)) wants.add('rap');
+      if(/afro|afrobeats/.test(text)) wants.add('afrobeats');
+      if(/remix|mix|remixed/.test(text)) wants.add('remix');
+      if(/ballad/.test(text)) wants.add('ballad');
+      if(/tradition|ลูกทุ่ง|พื้นบ้าน/.test(text)) wants.add('tradition');
 
-  function cardHTML(t){
-    const thumb = `https://img.youtube.com/vi/${t.youtubeId}/hqdefault.jpg`;
-    return `<div class="card" data-yid="${t.youtubeId}" data-title="${t.title}">
-      <img src="${thumb}" alt="${t.title}">
-      <div class="title-sm">${t.title}</div>
-      <div class="tags">${(t.tags||[]).join(' · ')}</div>
-    </div>`;
-  }
+      const scored = tracks.map(t=>{
+        let s = 0;
+        const tagsLC = (t.tags||[]).map(x=>String(x).toLowerCase());
+        s += tagsLC.filter(tag => wants.has(tag)).length * 2;
+        if (text) {
+          if (t.title.toLowerCase().includes(text)) s += 2;
+          s += tagsLC.filter(tag => text.includes(tag) || tag.includes(text)).length;
+        }
+        if (t.releaseDate) s += new Date(t.releaseDate).getTime()/1e13;
+        return {t, s};
+      }).sort((a,b)=>b.s-a.s)
+        .filter(x=>x.s>0)
+        .slice(0,6)
+        .map(x=>x.t);
 
-  function render(){
-    const grid = byId('grid');
-    const q = (byId('q')?.value||'').trim().toLowerCase();
-    const activeTags = new Set([...document.querySelectorAll('.chip.active')].map(c=>c.dataset.tag));
-    let list = tracks.slice();
-
-    if(q){ list = list.filter(t => t.title.toLowerCase().includes(q) || (t.tags||[]).some(tag=>tag.toLowerCase().includes(q))); }
-    if(activeTags.size){ list = list.filter(t => (t.tags||[]).some(tag => activeTags.has(tag.toLowerCase()))); }
-
-    const sortVal = byId('sortSelect')?.value || 'latest';
-    if(sortVal === 'latest'){
-      list.sort((a,b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
-    } else if(sortVal === 'az'){
-      list.sort((a,b)=> a.title.localeCompare(b.title));
+      byId('recs').innerHTML = recHTML(scored.length ? scored : tracks.slice(0,6));
     }
 
-    grid.innerHTML = list.map(cardHTML).join('');
-  }
+    // One-time click handler (grid + assistant)
+    document.addEventListener('click', e=>{
+      // Grid cards
+      const card = e.target.closest('#grid [data-yid]');
+      if(card){ playTrack(card.dataset.yid, card.dataset.title); return; }
+      // Assistant recs
+      const rec = e.target.closest('#recs .rec');
+      if(rec){ playTrack(rec.dataset.yid, rec.dataset.title); byId('home')?.scrollIntoView({behavior:'smooth'}); }
+    });
 
-  function playTrack(id,title){
-    const url = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&color=white`;
-    byId('hero-iframe').src = url;
-    byId('hero-title').textContent = title;
-  }
+    // Live suggestions (debounced)
+    (function(){
+      const input = byId('askbox');
+      if(!input) return;
+      let t;
+      input.addEventListener('input', ()=>{
+        clearTimeout(t);
+        t = setTimeout(()=>{
+          if(input.value.trim().length>=2) askAssistant();
+        }, 160);
+      });
+    })();
 
-  // Load tracks.json dynamically
-  fetch('tracks.json')
-    .then(res => res.json())
-    .then(data => {
-      tracks = data;
-      // init tag chips
+    // ---------- Init ----------
+    async function loadTracks(){
+      try {
+        const res = await fetch('tracks.json?ver=' + Date.now(), { cache: 'no-store' });
+        tracks = await res.json();
+      } catch(e){
+        console.warn('tracks.json fetch failed', e);
+        tracks = [];
+      }
+    }
+
+    (async function init(){
+      // load
+      await loadTracks();
+
+      // hero
+      if(tracks.length){ playTrack(tracks[0].youtubeId, tracks[0].title); }
+
+      // chips
       const tagSet = new Set();
-      tracks.forEach(t => (t.tags||[]).forEach(tag => tagSet.add(tag.toLowerCase())));
+      tracks.forEach(t => (t.tags||[]).forEach(tag => tagSet.add(String(tag).toLowerCase())));
       const chips = byId('chips');
       chips.innerHTML = [...tagSet].sort().map(tag=>`<button class="chip" data-tag="${tag}">${tag}</button>`).join('');
       chips.addEventListener('click', e=>{
@@ -240,22 +247,17 @@
         render();
       });
 
-      // init first video + render
-      if(tracks.length){ playTrack(tracks[0].youtubeId, tracks[0].title); }
+      // listeners
+      byId('q').addEventListener('input', render);
+      byId('sortSelect').addEventListener('change', render);
+
+      // render grid
       render();
-    })
-    .catch(err => console.error('Failed to load tracks.json:', err));
 
-  // event listeners
-  byId('q').addEventListener('input', render);
-  byId('sortSelect').addEventListener('change', render);
-
-  // delegate clicks on grid
-  document.getElementById('grid').addEventListener('click', e=>{
-    const card = e.target.closest('[data-yid]');
-    if(!card) return;
-    playTrack(card.dataset.yid, card.dataset.title);
-  });
-</script>
+      // seed assistant with latest 6
+      byId('recs').innerHTML =
+        recHTML(tracks.slice().sort((a,b)=>new Date(b.releaseDate)-new Date(a.releaseDate)).slice(0,6));
+    })();
+  </script>
 </body>
 </html>
