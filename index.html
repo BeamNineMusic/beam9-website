@@ -15,25 +15,20 @@
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
     .aspect-video{position:relative;width:100%;padding-top:56.25%;background:#000;border-radius:12px;overflow:hidden}
     .aspect-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-    .toolbar{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+    .toolbar{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0;align-items:center}
     .search{flex:1 1 260px;display:flex;align-items:center;background:#0f1a33;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 12px}
     .search input{flex:1;background:transparent;border:0;color:#e5e7eb;outline:none;font-size:14px}
     .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .chip{border:1px solid rgba(255,255,255,.14);background:#0f152a;border-radius:999px;padding:6px 12px;font-weight:600;font-size:12px;color:#d1d5db;cursor:pointer}
     .chip.active{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.35)}
+    .sort{margin-left:auto}
+    select{background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 10px;font-size:14px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
     .card{background:#0f172a;padding:10px;border-radius:12px;cursor:pointer;display:flex;flex-direction:column}
     .card img{width:100%;border-radius:8px}
     .title-sm{font-weight:700;margin:6px 0}
     .tags{font-size:12px;opacity:.75}
     footer{margin-top:30px;font-size:14px;opacity:.75;text-align:center}
-    /* search + chips */
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;align-items:center}
-    .search{flex:1 1 260px;display:flex;gap:8px;align-items:center;background:#0f1a33;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px}
-    .search input{flex:1;background:transparent;border:0;color:#e5e7eb;outline:none}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{border:1px solid rgba(255,255,255,.18);background:#0f172a;border-radius:999px;padding:6px 10px;font-size:12px;color:#d1d5db;cursor:pointer}
-    .chip.active{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.25)}
   </style>
 </head>
 <body>
@@ -49,21 +44,24 @@
     </section>
 
     <section id="music">
-      <div class="toolbar">
-        <div class="search" role="search"><span style="margin-right:8px">🔎</span>
-          <input id="q" placeholder="Search songs or tags… (e.g., lullaby, thai, afrobeats)" aria-label="Search" />
-        </div>
-      </div>
-      <div id="chips" class="chips"></div>
-      <div class="toolbar">
-        <div class="search" role="search" aria-label="Search songs or tags">
-          <span aria-hidden="true">🔎</span>
-          <input id="q" placeholder="Search songs or tags… (e.g., lullaby, thai, afrobeats)" />
-        </div>
-        <div id="chips" class="chips" aria-label="Tag filters"></div>
-      </div>
-      <div id="grid" class="grid"></div>
-    </section>
+  <div class="toolbar" style="justify-content:space-between">
+    <div class="search" role="search" aria-label="Search songs or tags">
+      <span aria-hidden="true">🔎</span>
+      <input id="q" placeholder="Search songs or tags… (e.g., lullaby, thai, afrobeats)" />
+    </div>
+    <div class="sort">
+      <label for="sort">Sort:</label>
+      <select id="sort" aria-label="Sort tracks">
+        <option value="latest" selected>Latest</option>
+        <option value="oldest">Oldest</option>
+        <option value="az">A–Z</option>
+        <option value="za">Z–A</option>
+      </select>
+    </div>
+  </div>
+  <div id="chips" class="chips" aria-label="Tag filters"></div>
+  <div id="grid" class="grid"></div>
+</section>
 
     <footer>
       Beam9 © <span id="year"></span> — Links: <a href="https://www.youtube.com/@iammrbeam9" target="_blank" rel="noopener">YouTube</a> · <a href="#">Spotify</a> · <a href="#">Apple Music</a>
@@ -71,7 +69,7 @@
   </div>
 
   <script>
-    const tracks = [
+    let tracks = [
       { slug: 'zombie-cat', title: 'Zombie Cat', youtubeId: 'JKOIWVJ3jms', tags: ['dance','funny','thai'], releaseDate: '2025-09-03' },
       { slug: 'ไฟในใจ', title: 'ไฟในใจ', youtubeId: 'dV12WbBh1XE', tags: ['rock pop ballad','encouragement','thai'], releaseDate: '2025-09-03' },
       { slug: 'ไหนใครบอกไม่รัก', title: 'ไหนใครบอกไม่รัก', youtubeId: '1HEPpUEOH_k', tags: ['dance','funny','thai'], releaseDate: '2025-05-25' },
@@ -84,7 +82,7 @@
       { slug: 'fire-in-me', title: 'Fire in Me', youtubeId: '6J9_5-MIGF8', tags: ['eng','encouragement','pop rock ballad'], releaseDate: '2025-08-06' },
       { slug: 'ข้ามฟ้าทะเลแสนไกล', title: 'ข้ามฟ้าทะเลแสนไกล', youtubeId: 'PpURvrJEpq0', tags: ['thai','tradition','pop'], releaseDate: '2025-08-18' },
       { slug: 'กล่องดำ', title: 'กล่องดำ', youtubeId: 'Kzo58bt8qIo', tags: ['thai','thai pop','encouragement'], releaseDate: '2025-08-04' }
-    ].sort((a,b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
+    ];
 
     const byId = x => document.getElementById(x);
     byId('year').textContent = new Date().getFullYear();
@@ -99,18 +97,34 @@
     }
 
     function render(){
-      const grid = byId('grid');
-      const q = (byId('q')?.value||'').trim().toLowerCase();
-      const activeTags = new Set([...document.querySelectorAll('.chip.active')].map(c=>c.dataset.tag));
-      let list = tracks.slice();
-      if(q){ list = list.filter(t => t.title.toLowerCase().includes(q) || (t.tags||[]).some(tag=>tag.toLowerCase().includes(q))); }
-      if(activeTags.size){ list = list.filter(t => (t.tags||[]).some(tag => activeTags.has(tag.toLowerCase()))); }
-      grid.innerHTML = list.map(cardHTML).join('');
-    }
-      const grid = byId('grid');
-      grid.innerHTML = list.map(cardHTML).join('');
-      renderChips(list);
-    }
+  const grid = byId('grid');
+  const q = (byId('q')?.value||'').trim().toLowerCase();
+  const activeTags = new Set([...document.querySelectorAll('.chip.active')].map(c=>c.dataset.tag));
+  const sortVal = (byId('sort')?.value)||'latest';
+
+  let list = tracks.slice();
+
+  if(q){
+    list = list.filter(t =>
+      t.title.toLowerCase().includes(q) ||
+      (t.tags||[]).some(tag => tag.toLowerCase().includes(q))
+    );
+  }
+  if(activeTags.size){
+    list = list.filter(t => (t.tags||[]).some(tag => activeTags.has(tag.toLowerCase())));
+  }
+
+  // sort
+  list.sort((a,b)=>{
+    if(sortVal==='latest') return new Date(b.releaseDate)-new Date(a.releaseDate);
+    if(sortVal==='oldest') return new Date(a.releaseDate)-new Date(b.releaseDate);
+    if(sortVal==='az')     return a.title.localeCompare(b.title);
+    if(sortVal==='za')     return b.title.localeCompare(a.title);
+    return 0;
+  });
+
+  grid.innerHTML = list.map(cardHTML).join('');
+}
 
     function playTrack(id,title){
       const url = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&color=white`;
@@ -125,20 +139,8 @@
     });
 
     byId('q').addEventListener('input', render);
-
-    function renderChips(list){
-      const chipsDiv = byId('chips');
-      const allTags = new Set();
-      tracks.forEach(t => (t.tags||[]).forEach(tag => allTags.add(tag)));
-      chipsDiv.innerHTML = Array.from(allTags).map(tag => `<div class="chip" data-tag="${tag}">${tag}</div>`).join('');
-      chipsDiv.querySelectorAll('.chip').forEach(chip =>{
-        chip.onclick = ()=>{
-          const tag = chip.dataset.tag.toLowerCase();
-          const filtered = tracks.filter(t=>(t.tags||[]).map(x=>x.toLowerCase()).includes(tag));
-          byId('grid').innerHTML = filtered.map(cardHTML).join('');
-        };
-      });
-    }
+    byId('sort').addEventListener('change', render);
+    byId('sortSelect').addEventListener('change', render);
 
     // Tag chips + search init
     (function initFilters(){
@@ -151,7 +153,6 @@
         e.target.classList.toggle('active');
         render();
       });
-      const q = byId('q'); if(q){ q.addEventListener('input', render); }
     })();
 
     // init first video
@@ -160,5 +161,3 @@
   </script>
 </body>
 </html>
-
-        
