@@ -1,15 +1,40 @@
 [
-  { "slug": "zombie-cat", "title": "Zombie Cat", "youtubeId": "JKOIWVJ3jms", "tags": ["สนุก", "สายโยก", "เต้น", "ตลก", "มันส์", "dance","funny","thai"], "releaseDate": "2025-09-03" },
-  { "slug": "ไฟในใจ", "title": "ไฟในใจ", "youtubeId": "dV12WbBh1XE", "tags": ["เพลงไทย", "ให้กำลังใจ", "ป้อปร้อค", "บัลลาด", "ต่อสู้", "ไม่ยอมแพ้", "rock pop ballad","encouragement","thai"], "releaseDate": "2025-09-03" },
-  { "slug": "ไหนใครบอกไม่รัก", "title": "ไหนใครบอกไม่รัก", "youtubeId": "1HEPpUEOH_k", "tags": ["เพลงน่ารัก", "รัก", "สนุก", "กุ้กกิ้ก", "เพลงไทย", "dance","funny","thai"], "releaseDate": "2025-05-25" },
-  { "slug": "ถ้าหัวใจเธอไม่ล้อค-มาสาดรักกัน", "title": "ถ้าหัวใจเธอไม่ล้อค มาสาดรักกัน", "youtubeId": "tn1J7rR14eg", "tags": ["เพลงสงกรานต์", "เพลงไทย", "เพลงสนุก", "เต้น", "dance","funny","thai"], "releaseDate": "2025-03-03" },
-  { "slug": "โอปป้าหายเพราะแมวเมี้ยว-โป้งโป๊งชึ่ง", "title": "โอปป้าหายเพราะแมวเมี้ยว", "youtubeId": "lu17CXCFlhI", "tags": ["เพลงไทย", "สนุก", "แมว", "เต้น", "ฮา", "thai","pop","remix"], "releaseDate": "2025-05-24" },
-  { "slug": "เสน่ห์เมืองแคว-แร็พ-โจ๊ะ", "title": "เสน่ห์เมืองแคว-แร็พโจ๊ะ", "youtubeId": "sIoC9TTr4vs", "tags": ["แร็พ", "โจ๊ะ", "สนุก", "มีความสุข", "เพลงไทย", "thai","rap","happy"], "releaseDate": "2025-05-10" },
-  { "slug": "ยกขันหมาก-โป๊งโป๊งชึ่ง", "title": "ยกขันหมาก โป๊งโป๊งชึ่ง", "youtubeId": "uB9vnSFNlcc", "tags": ["เพลงไทย", "โป๊ง โป๊ง ชึ่ง", "มีความสุข", "สนุก", "แต่งงาน","thai","beats","dance"], "releaseDate": "2025-08-05" },
+  { "slug": "zombie-cat", "title": "Zombie Cat", "youtubeId": "JKOIWVJ3jms", "tags": ["สนุก", "สายโยก", "ตลก", "มันส์", "dance","funny","thai"], "releaseDate": "2025-09-03" },
+  { "slug": "ไฟในใจ", "title": "ไฟในใจ", "youtubeId": "dV12WbBh1XE", "tags": ["เพลงไทย", "ให้กำลังใจ", "ป้อปร้อค", "บัลลาด","rock pop ballad","encouragement","thai"], "releaseDate": "2025-09-03" },
+  { "slug": "ไหนใครบอกไม่รัก", "title": "ไหนใครบอกไม่รัก", "youtubeId": "1HEPpUEOH_k", "tags": ["เพลงน่ารัก", "รัก", "สนุก", "เพลงไทย", "dance","funny","thai"], "releaseDate": "2025-05-25" },
+  { "slug": "ถ้าหัวใจเธอไม่ล้อค-มาสาดรักกัน", "title": "ถ้าหัวใจเธอไม่ล้อค มาสาดรักกัน", "youtubeId": "tn1J7rR14eg", "tags": ["เพลงสงกรานต์", "เพลงไทย", "สนุก", "dance","funny","thai"], "releaseDate": "2025-03-03" },
+  { "slug": "โอปป้าหายเพราะแมวเมี้ยว-โป้งโป๊งชึ่ง", "title": "โอปป้าหายเพราะแมวเมี้ยว", "youtubeId": "lu17CXCFlhI", "tags": ["เพลงไทย", "สนุก", "แมว", "ตลก", "thai","pop","remix"], "releaseDate": "2025-05-24" },
+  { "slug": "เสน่ห์เมืองแคว-แร็พ-โจ๊ะ", "title": "เสน่ห์เมืองแคว-แร็พโจ๊ะ", "youtubeId": "sIoC9TTr4vs", "tags": ["แร็พ", "สนุก", "ความสุข", "เพลงไทย", "thai","rap","happy"], "releaseDate": "2025-05-10" },
+  { "slug": "ยกขันหมาก-โป๊งโป๊งชึ่ง", "title": "ยกขันหมาก โป๊งโป๊งชึ่ง", "youtubeId": "uB9vnSFNlcc", "tags": ["เพลงไทย", "โป๊ง โป๊ง ชึ่ง", "ความสุข", "สนุก", "แต่งงาน","thai","beats","dance"], "releaseDate": "2025-08-05" },
   { "slug": "ใจเอ๋ยใจ-original", "title": "ใจเอ๋ยใจ Original", "youtubeId": "H8Z2N4LCD1A", "tags": ["เพลงเพราะ", "อกหัก", "เศร้า", "เหงา", "เพลงไทย ", "thai","sad","thai pop"], "releaseDate": "2025-07-15" },
   { "slug": "ปั้ปปาดูวับ-remixed", "title": "ปั้ปปาดูวับ Remixed", "youtubeId": "Q8QKWIFqksk", "tags": ["เพลงไทย", "สนุก", "รัก", "น่ารัก", "ฟังสบาย", "thai","fun","thai pop"], "releaseDate": "2025-07-15" },
-  { "slug": "fire-in-me", "title": "Fire in Me", "youtubeId": "6J9_5-MIGF8", "tags": ["อังกฤษ", "ให้กำลังใจ", "ป้อปร้อค", "ไม่ยอมแพ้", "eng","encouragement","pop rock ballad"], "releaseDate": "2025-08-06" },
-  { "slug": "ข้ามฟ้าทะเลแสนไกล", "title": "ข้ามฟ้าทะเลแสนไกล", "youtubeId": "PpURvrJEpq0", "tags": ["เพลงไทย", "ดนตรีร่วมสมัย", "ยุค80", "ป้อป", "ลูกกรุง", "ดนตรีไทย", "thai","tradition","pop"], "releaseDate": "2025-08-18" },
-  { "slug": "กล่องดำ", "title": "กล่องดำ", "youtubeId": "Kzo58bt8qIo", "tags": ["เพลงไทย", "ให้กำลังใจ", "ต่อสู้", "ไม่ท้อ", "ป้อป", "แก้ปัญหา", "สู้ชีวิต", "thai","thai pop","encouragement"], "releaseDate": "2025-08-04" },
-  { "slug": "ใจอยากโบยบิน", "title": "ใจอยากโบยบิน", "youtubeId": "9zxAu1kfATs", "tags": ["เพลงไทย", "สนุก", "เดินทาง", "ตลก", "เฮฮา", "thai","funny","dance"], "releaseDate": "2025-08-16" }
+  { "slug": "fire-in-me", "title": "Fire in Me", "youtubeId": "6J9_5-MIGF8", "tags": ["อังกฤษ", "ให้กำลังใจ", "ป้อปร้อค","english","encouragement","pop rock ballad"], "releaseDate": "2025-08-06" },
+  { "slug": "ข้ามฟ้าทะเลแสนไกล", "title": "ข้ามฟ้าทะเลแสนไกล", "youtubeId": "PpURvrJEpq0", "tags": ["เพลงไทย", "ดนตรีร่วมสมัย", "ยุค80", "ป้อป", "ดนตรีไทย", "thai","tradition","pop"], "releaseDate": "2025-08-18" },
+  { "slug": "กล่องดำ", "title": "กล่องดำ", "youtubeId": "Kzo58bt8qIo", "tags": ["เพลงไทย", "ให้กำลังใจ", "ป้อป", "thai","thai pop","encouragement"], "releaseDate": "2025-08-04" },
+  { "slug": "ใจอยากโบยบิน", "title": "ใจอยากโบยบิน", "youtubeId": "9zxAu1kfATs", "tags": ["เพลงไทย", "สนุก", "เดินทาง", "ตลก", "thai","funny","dance"], "releaseDate": "2025-08-16" }
+  { "slug": "โอบกอดอุ่น", "title": "โอบกอดอุ่น", "youtubeId": "7Gsd4R8LTu0", "tags": ["thai","เพลงไทย", "ครอบครัว", "ซึ้งกินใจ","dance"], "releaseDate": "2025-078-15" }
+  { "slug": "thai-isaan-wedding", "title": "Thai Isan Wedding", "youtubeId": "eD0WWJArf-M", "tags": ["thai","wedding","แต่งงาน", "เพลงไทย", "ฟังสบาย"], "releaseDate": "2025-08-21" }
+  { "slug": "lofi-chill-beat", "title": "Lofi Chill Beat", "youtubeId": "TWUVwLQhozk", "tags": ["instrumental music","lofi","chill"], "releaseDate": "2025-03-22" }
+  { "slug": "daydream-in-blue", "title": "Daydream in Blue", "youtubeId": "oc1S4pveVis", "tags": ["english","jazz","slow"], "releaseDate": "2025-02-27" }
+  { "slug": "the-promised-land", "title": "The Promised Land", "youtubeId": "WHSmkzOjM94", "tags": ["english","christian","pop"], "releaseDate": "2025-08-26" }
+  { "slug": "drifting-in-a-cloud", "title": "Drifting in a Cloud", "youtubeId": "9tMTdRmZN5E", "tags": ["instrumental music","lullaby", "relax and calm","babies"], "releaseDate": "2025-08-07" }
+  { "slug": "starlight-serenade", "title": "Starlight Serenade", "youtubeId": "Yr9eYX7wmVo", "tags": ["instrumental music","lullaby", "relax and calm","babies"], "releaseDate": "2025-08-07" }
+  { "slug": "moonlight-cradle", "title": "Moonlight Cradle", "youtubeId": "bHhnuuXp-Tk", "tags": ["instrumental music","lullaby", "relax and calm","babies"], "releaseDate": "2025-08-07" }
+  { "slug": "twinkle-dreams", "title": "Twinkle Dreams", "youtubeId": "lL8QJldzScg", "tags": ["instrumental music","lullaby", "relax and calm","babies"], "releaseDate": "2025-08-07" }
+  { "slug": "butterfly-lullaby", "title": "Butterfly Lullaby", "youtubeId": "OcGPhcexGWw", "tags": ["instrumental music","lullaby", "relax and calm","babies"], "releaseDate": "2025-08-07" }
+  { "slug": "เสียงหัวใจบอกให้รัก", "title": "เสียงหัวใจบอกให้รัก", "youtubeId": "6J9_5-MIGF8", "tags": ["MV","thai","รัก","ซึ้งกินใจ","thai song","love"], "releaseDate": "2025-09-02 }
+  { "slug": "ข้ามฟ้าทะเลแสนไกล", "title": "ข้ามฟ้าทะเลแสนไกล", "youtubeId": "PpURvrJEpq0", "tags": ["thai","ดนตรีร่วมสมัย","ฟังสบาย","MV"], "releaseDate": "2025-08-18" }
+  { "slug": "night-life", "title": "Night Life", "youtubeId": "ysGDNYdCINo", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-22" }
+  { "slug": "city-light", "title": "City Light", "youtubeId": "2sk6MuGrtD0", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-22" }
+  { "slug": "wonder", "title": "Wonder", "youtubeId": "Nm3Nn8SXAGw", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-22" }
+  { "slug": "chill-beat", "title": "Chill Beat", "youtubeId": "FWvrmCTDLQQ", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-22" }
+  { "slug": "thai-lofi-lullaby-fusion", "title": "Thai Lofi Lullaby Fusion", "youtubeId": "h8a30pCvROM", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-08-16" }
+  { "slug": "thai-lofi-joyful", "title": "Thai Lo-fi Joyful", "youtubeId": ""JgBSd1E6Lnw, "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-24" }
+  { "slug": "lofi-beats-from-thailand", "title": "Lo-fi Beats from Thailand", "youtubeId": "6qniJhrEy0g", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-24" }
+  { "slug": "thai-lofi", "title": "Thai Lo-fi", "youtubeId": "WQu4HuZXaU0", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-03-24" }
+  { "slug": "lofi-C#m", "title": "Lofi C#m", "youtubeId": "LqlTKfdMRZA", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-04-02" }
+  { "slug": "lofi", "title": "Lofi", "youtubeId": "Tc0rHOLVH3g", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-04-02" }
+  { "slug": "thai-lofi-music", "title": "Thai Lofi Music", "youtubeId": "L7VsYMuSRZo", "tags": ["instrumental music","lofi","calm and relax"], "releaseDate": "2025-07-09" }
+  { "slug": "รักเหมือนไวไว", "title": "รักเหมือนไวไว", "youtubeId": "v9nhWFhq_ts", "tags": ["thai","สนุก", "เพลงไทย", "ป้อป", "สนุก", "dance"], "releaseDate": "2025-08-23" }
+  { "slug": "southern-wedding-thailand", "title": "Southern Wedding, Thailand", "youtubeId": "bMLIrnJ0by0", "tags": ["thai","สนุก", "เพลงไทย", "ป้อป", "สนุก", "dance"], "releaseDate": "2025-07-29" }
 ]
