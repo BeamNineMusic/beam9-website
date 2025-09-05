@@ -126,20 +126,23 @@
 
   <script>
     const tracks = [
+      <script>
+let tracks = [
       { slug: 'zombie-cat', title: 'Zombie Cat', youtubeId: 'JKOIWVJ3jms', tags: ['dance','funny','thai'], releaseDate: '2025-09-03' },
       { slug: 'ไฟในใจ', title: 'ไฟในใจ', youtubeId: 'dV12WbBh1XE', tags: ['rock pop ballad','encouragement','thai'], releaseDate: '2025-09-03' },
       { slug: 'ไหนใครบอกไม่รัก', title: 'ไหนใครบอกไม่รัก', youtubeId: '1HEPpUEOH_k', tags: ['dance','funny','thai'], releaseDate: '2025-05-25' },
       { slug: 'ถ้าหัวใจเธอไม่ล้อค-มาสาดรักกัน', title: 'ถ้าหัวใจเธอไม่ล้อค มาสาดรักกัน', youtubeId: 'tn1J7rR14eg', tags: ['dance','funny','thai'], releaseDate: '2025-03-03' },
       { slug: 'โอปป้าหายเพราะแมวเมี้ยว-โป้งโป๊งชึ่ง', title: 'โอปป้าหายเพราะแมวเมี้ยว', youtubeId: 'lu17CXCFlhI', tags: ['thai','pop','remix'], releaseDate: '2025-05-24' },
       { slug: 'เสน่ห์เมืองแคว-แร็พ-โจ๊ะ', title: 'เสน่ห์เมืองแคว-แร็พโจ๊ะ', youtubeId: 'sIoC9TTr4vs', tags: ['thai','rap','happy'], releaseDate: '2025-05-10' },
-      { slug: 'ยกขันหมาก-โป๊งโป๊งชึ่ง', title: 'ยกขันหมาก โป๊งโป๊งชึ่ง', youtubeId: 'uB9vnSFNlcc', tags: ['thai','afrobeats','dance'], releaseDate: '2025-08-05' }
-      { slug: 'ใจเอ๋ยใจ-Original', title: 'ใจเอ๋ยใจ Original', youtubeId: 'H8Z2N4LCD1A', tags: ['thai','sad','Thai Pop'], releaseDate: '2025-07-15' }
-      { slug: 'ปั้ปปาดูวับ-Remixed', title: 'ปั้ปปาดูวับ Remixed', youtubeId: 'Q8QKWIFqksk', tags: ['thai','fun','Thai Pop'], releaseDate: '2025-07-15' }
-      { slug: 'Fire-in-Me', title: 'Fire in Me', youtubeId: '6J9_5-MIGF8', tags: ['eng','encouragement','pop rock ballad'], releaseDate: '2025-08-06' }
-      { slug: 'ข้ามฟ้าทะเลแสนไกล', title: 'ข้ามฟ้าทะเลแสนไกล ', youtubeId: 'PpURvrJEpq0', tags: ['thai','tradition','pop'], releaseDate: '2025-08-18' }
-      { slug: 'กล่องดำ', title: 'กล่องดำ', youtubeId: 'Kzo58bt8qIo', tags: ['thai','thai pop','encouragement'], releaseDate: '2025-08-04' }       
+      { slug: 'ยกขันหมาก-โป๊งโป๊งชึ่ง', title: 'ยกขันหมาก โป๊งโป๊งชึ่ง', youtubeId: 'uB9vnSFNlcc', tags: ['thai','afrobeats','dance'], releaseDate: '2025-08-05' },
+      { slug: 'ใจเอ๋ยใจ-Original', title: 'ใจเอ๋ยใจ Original', youtubeId: 'H8Z2N4LCD1A', tags: ['thai','sad','thai pop'], releaseDate: '2025-07-15' },
+      { slug: 'ปั้ปปาดูวับ-Remixed', title: 'ปั้ปปาดูวับ Remixed', youtubeId: 'Q8QKWIFqksk', tags: ['thai','fun','thai pop'], releaseDate: '2025-07-15' },
+      { slug: 'Fire-in-Me', title: 'Fire in Me', youtubeId: '6J9_5-MIGF8', tags: ['eng','encouragement','pop rock ballad'], releaseDate: '2025-08-06' },
+      { slug: 'ข้ามฟ้าทะเลแสนไกล', title: 'ข้ามฟ้าทะเลแสนไกล', youtubeId: 'PpURvrJEpq0', tags: ['thai','tradition','pop'], releaseDate: '2025-08-18' },
+      { slug: 'กล่องดำ', title: 'กล่องดำ', youtubeId: 'Kzo58bt8qIo', tags: ['thai','thai pop','encouragement'], releaseDate: '2025-08-04' }
     ].sort((a,b)=> new Date(b.releaseDate) - new Date(a.releaseDate));
-
+</script>
+       
     const byId = x => document.getElementById(x);
     const year = new Date().getFullYear(); byId('year').textContent = year;
 
@@ -195,10 +198,7 @@
         </article>`;
       }).join('');
     }
-
-
-    
-
+ 
 
     render();
   </script>
